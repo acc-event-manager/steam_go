@@ -3,7 +3,7 @@ package steam_go
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -37,11 +37,10 @@ func GetPlayerSummaries(steamId, apiKey string) (*PlayerSummaries, error) {
 	if err != nil {
 		return nil, err
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-
 	type Result struct {
 		Response struct {
 			Players []PlayerSummaries `json:"players"`
