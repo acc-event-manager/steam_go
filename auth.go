@@ -70,7 +70,7 @@ func (id *OpenID) ValidateAndGetID() (string, error) {
 	if id.Mode() != "id_res" {
 		return "", errors.New("Mode must equal to \"id_res\"")
 	}
-	if id.data.Get("openid.return_to") != id.returnUrl {
+	if id.data.Get("openid.return_to") != url.QueryEscape(id.returnUrl) {
 		return "", errors.New("the \"return_to url\" must match the url of current request")
 	}
 	params := make(url.Values)
