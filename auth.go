@@ -5,7 +5,6 @@ package steam_go
 import (
 	"errors"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -35,21 +34,16 @@ func NewOpenID(r *http.Request) *OpenID {
 	if r.Header.Get("X-Forwarded-Proto") == "https" || r.TLS != nil {
 		proto = "https://"
 	}
-	log.Println(r.Header.Get("X-Forwarded-Proto"))
-	log.Println(proto)
 	if r.Header.Get("X-Forwarded-Host") == "" {
 		id.root = proto + r.Host
 	} else {
 		id.root = proto + r.Header.Get("X-Forwarded-Host")
 	}
-	log.Println(r.Header.Get("X-Forwarded-Host"))
-	log.Println(id.root)
 	uri := r.RequestURI
 	if i := strings.Index(uri, "openid."); i != -1 {
 		uri = uri[0 : i-1]
 	}
 	id.returnUrl = id.root + uri
-	log.Println("returnUrl", id.returnUrl)
 	switch r.Method {
 	case "POST":
 		r.ParseForm()
@@ -67,7 +61,7 @@ func (id OpenID) AuthUrl() string {
 	data.Set("openid.mode", openMode)
 	data.Set("openid.ns", openNS)
 	data.Set("openid.realm", id.root)
-	data.Set("openid.return_to", url.QueryEscape(id.returnUrl))
+	data.Set("openid.return_to", id.returnUrl)
 	url := steamLogin + "?" + data.Encode()
 	return url
 }
@@ -76,9 +70,9 @@ func (id *OpenID) ValidateAndGetID() (string, error) {
 	if id.Mode() != "id_res" {
 		return "", errors.New("Mode must equal to \"id_res\"")
 	}
-	if id.data.Get("openid.return_to") != url.QueryEscape(id.returnUrl) {
-		return "", errors.New("the \"return_to url\" must match the url of current request")
-	}
+	// if id.data.Get("openid.return_to") != id.returnUrl {
+	// 	return "", errors.New("the \"return_to url\" must match the url of current request")
+	// }
 	params := make(url.Values)
 	params.Set("openid.assoc_handle", id.data.Get("openid.assoc_handle"))
 	params.Set("openid.signed", id.data.Get("openid.signed"))
