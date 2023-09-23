@@ -5,6 +5,7 @@ package steam_go
 import (
 	"errors"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -34,16 +35,21 @@ func NewOpenID(r *http.Request) *OpenID {
 	if r.Header.Get("X-Forwarded-Proto") == "https" || r.TLS != nil {
 		proto = "https://"
 	}
+	log.Println(r.Header.Get("X-Forwarded-Proto"))
+	log.Println(proto)
 	if r.Header.Get("X-Forwarded-Host") == "" {
 		id.root = proto + r.Host
 	} else {
 		id.root = proto + r.Header.Get("X-Forwarded-Host")
 	}
+	log.Println(r.Header.Get("X-Forwarded-Host"))
+	log.Println(id.root)
 	uri := r.RequestURI
 	if i := strings.Index(uri, "openid."); i != -1 {
 		uri = uri[0 : i-1]
 	}
 	id.returnUrl = id.root + uri
+	log.Println("returnUrl", id.returnUrl)
 	switch r.Method {
 	case "POST":
 		r.ParseForm()
