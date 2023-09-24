@@ -7,10 +7,10 @@ import (
 )
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	opID := steam_go.NewOpenID(r)
+	opID := steam_go.NewOpenID(r, false)
 	switch opID.Mode() {
 	case "":
-		http.Redirect(w, r, opID.AuthUrl(), 301)
+		http.Redirect(w, r, opID.AuthUrl(), http.StatusMovedPermanently)
 	case "cancel":
 		w.Write([]byte("Authorization cancelled"))
 	default:

@@ -26,19 +26,24 @@ type OpenID struct {
 	root      string
 	returnUrl string
 	data      url.Values
+	proxy     bool
 }
 
-func NewOpenID(r *http.Request) *OpenID {
+func NewOpenID(r *http.Request, proxy bool) *OpenID {
 	id := new(OpenID)
 	proto := "http://"
-	if r.Header.Get("X-Forwarded-Proto") == "https" || r.TLS != nil {
+	host := r.Host
+	if proxy {
+		if r.Header.Get("X-Forwarded-Proto") == "https" {
+			proto = "https://"
+		}
+		if r.Header.Get("X-Forwarded-Host") != "" {
+			host = r.Header.Get("X-Forwarded-Host")
+		}
+	} else if r.TLS != nil {
 		proto = "https://"
 	}
-	if r.Header.Get("X-Forwarded-Host") == "" {
-		id.root = proto + r.Host
-	} else {
-		id.root = proto + r.Header.Get("X-Forwarded-Host")
-	}
+	id.root = proto + host
 	uri := r.RequestURI
 	if i := strings.Index(uri, "openid."); i != -1 {
 		uri = uri[0 : i-1]
@@ -51,6 +56,7 @@ func NewOpenID(r *http.Request) *OpenID {
 	case "GET":
 		id.data = r.URL.Query()
 	}
+	id.proxy = proxy
 	return id
 }
 
