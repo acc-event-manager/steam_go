@@ -26,7 +26,7 @@ type PlayerSummaries struct {
 	LocCountryCode    string `json:"loccountrycode"`
 	LocStateCode      string `json:"locstatecode"`
 	LocCityId         int    `json:"loccityid"`
-	GameId            int    `json:"gameid"`
+	GameId            string `json:"gameid"`
 	GameExtraInfo     string `json:"gameextrainfo"`
 	GameServerIp      string `json:"gameserverip"`
 }
