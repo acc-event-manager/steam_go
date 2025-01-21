@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/pektezol/steam_go"
+	"github.com/acc-event-manager/steam_go"
 )
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
