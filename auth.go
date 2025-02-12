@@ -3,6 +3,7 @@ package steam_go
 // Modified version from github.com/solovev/steam_go
 // Credits: github.com/solovev, github.com/ramonberrutti, https://github.com/Fyb3roptik, https://github.com/anotherGoogleFan
 import (
+	"log"
 	"errors"
 	"io"
 	"net/http"
