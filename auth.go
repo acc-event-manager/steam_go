@@ -4,6 +4,7 @@ package steam_go
 // Credits: github.com/solovev, github.com/ramonberrutti, https://github.com/Fyb3roptik, https://github.com/anotherGoogleFan
 import (
 	"log"
+	"fmt"
 	"errors"
 	"io"
 	"net/http"
