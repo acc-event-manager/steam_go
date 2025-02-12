@@ -103,7 +103,7 @@ func (id *OpenID) ValidateAndGetID() (string, error) {
 	response := strings.Split(string(content), "\n")
 	
 	log.Println(response[0])
-	ns := fmt.Sprintf("%s:%s", "ns", "openNS")
+	ns := fmt.Sprintf("%s:%s", "ns", openNS)
 	log.Println(ns)
 	if response[0] != ns {
 		return "", errors.New("wrong ns in the response")
