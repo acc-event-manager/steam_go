@@ -100,9 +100,11 @@ func (id *OpenID) ValidateAndGetID() (string, error) {
 		return "", err
 	}
 	response := strings.Split(string(content), "\n")
-	log.Println(openNS)
+	
 	log.Println(response[0])
-	if response[0] != openNS {
+	ns := fmt.Sprintf("%s:%s", "ns", "openNS")
+	log.Println(ns)
+	if response[0] != ns {
 		return "", errors.New("wrong ns in the response")
 	}
 	if strings.HasSuffix(response[1], "false") {
