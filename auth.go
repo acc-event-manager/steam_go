@@ -99,7 +99,7 @@ func (id *OpenID) ValidateAndGetID() (string, error) {
 		return "", err
 	}
 	response := strings.Split(string(content), "\n")
-	if response[0] != "ns:"+openNS {
+	if response[0] != openNS {
 		return "", errors.New("wrong ns in the response")
 	}
 	if strings.HasSuffix(response[1], "false") {
